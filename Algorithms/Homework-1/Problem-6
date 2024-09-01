@@ -1,0 +1,34 @@
+/* Write a function push_unique with the signature:
+bool push_unique(std::vector<int>&, int);
+The first parameter is a vector of numbers, and the second parameter is the element 
+that should be added to the end of the vector only if the element is not already in the vector. 
+The function should execute in O(n) time, and the vector does not need to be sorted. 
+The function returns true if the element was added to the vector. */
+
+#include <iostream>
+#include <vector>
+
+
+bool push_unique(std::vector<int>& vec, int el) {
+    
+    for (int i = 0; i < vec.size(); ++i) {
+        if (vec[i] == el) {
+            return false;
+        }
+    } 
+    vec.push_back(el);
+    return true;
+}
+
+int main() {
+    std::vector<int> vektor = {656,434,232,545,23,1,2,5,7,8,19,83,828,4};
+    int element = 3;
+    
+    if (push_unique(vektor, element)) {
+        std::cout << "Novi element je dodan!" << std::endl;
+    } else {
+        std::cout << "Element se vec nalazi!" << std::endl;
+    }
+    
+    return 0;
+}
