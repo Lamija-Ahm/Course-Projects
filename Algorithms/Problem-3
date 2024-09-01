@@ -1,0 +1,33 @@
+/* Write a recursive function that checks whether the given C string is a palindrome. The function should have the signature:
+bool palindrome(const char* s, int n); */
+
+#include<iostream>
+#include<cstring>
+
+
+bool palindrome(const char* s, int n) {
+
+    if (n <= 1)
+        return true;
+    
+    if (s[0]==' ') 
+        return palindrome(s + 1, n - 1);
+    
+    if (s[n - 1]==' ')
+        return palindrome(s, n - 1);
+    
+    if (s[0] == s[n - 1])
+        return palindrome(s + 1, n - 2);
+    
+    return false;
+}
+
+int main() {
+    const char* str = "ana voli milovana";
+    if (palindrome(str, strlen(str)))
+        std::cout << "String \"" << str << "\" je palindrom." << std::endl;
+    else
+        std::cout << "String \"" << str << "\" nije palindrom." << std::endl;
+    
+    return 0;
+}
