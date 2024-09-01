@@ -1,0 +1,50 @@
+/* Write a recursive function that calculates the sum of all elements in an array. The function should have the following prototype:
+int sum(const int* array, int n);
+where array is the address of the first element in the array, and n is the total number of elements. */
+
+#include <iostream>
+#include <vector>
+#include<iterator>
+
+template<typename It, typename T>
+It upper_bound(It begin, It end, const T& elem) {
+    
+    while (begin < end) {
+        It mid = begin + (end-begin) / 2;
+        
+        if (*mid <= elem) {
+            begin = mid + 1;
+        } else { 
+            end = mid;
+        }
+    }
+    
+    return begin;
+}
+
+int main() {
+    std::vector<int> vektor = {2, 4, 6, 8, 10};
+    auto it = upper_bound(vektor.begin(), vektor.end(), 7);
+    vektor.insert(it, 7);
+    
+    for (const auto& e : vektor) {
+        std::cout << e << " ";
+    } std::cout << std::endl;
+    
+    it = upper_bound(vektor.begin(), vektor.end(), 20);
+    vektor.insert(it, 20);
+  
+    for (const auto& e : vektor) {
+        std::cout << e << " ";
+    } std::cout << std::endl;
+    
+
+    it = upper_bound(vektor.begin(), vektor.end(), 7);
+    vektor.insert(it, 7);
+    
+    for (const auto& e : vektor) {
+        std::cout << e << " ";
+    } std::cout << std::endl;
+    
+    return 0;
+}
