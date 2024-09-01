@@ -1,0 +1,71 @@
+#include <algorithm>
+#include<vector>
+#include<iostream>
+
+//Algoritam je stabilan
+//Radi na O(nlogn)
+//Moze sa forward iteratorima
+//in-place
+
+
+template<typename It>
+void merge(It begin, It middle, It end) {
+    auto left_ = middle - begin;
+    auto right_ = end - middle;
+
+    if (left_ > 0 && right_ > 0){
+        
+        if (*(middle - 1) <= *middle) {
+            return;
+        }
+
+        auto left_it = begin;
+        auto right_it = middle;
+
+        
+        while (left_it != middle && right_it != end) {
+            if (*left_it <= *right_it) {
+                ++left_it;
+            } else {
+                auto temp = *right_it;
+                std::copy_backward(left_it, middle - 1, middle);
+                *left_it = temp;
+                ++right_it;
+                ++middle;
+            }
+        }
+    }
+}
+
+template<typename It>
+void mergesort(It begin, It end) {
+    auto n = end - begin;
+    if (n <= 1)
+        return;
+
+    auto middle = begin + n / 2;
+    mergesort(begin, middle);
+    mergesort(middle, end);
+    merge(begin, middle, end);
+}
+
+
+int main() {
+    std::vector<int> vec = {9, 74, 15, 11, 14, 1, 19, 3, 10, 6};
+
+    std::cout << "Original: ";
+    for (int num : vec) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+
+    mergesort(vec.begin(), vec.end());
+
+    std::cout << "Sorted: ";
+    for (int num : vec) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
