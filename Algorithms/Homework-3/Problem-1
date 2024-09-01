@@ -1,0 +1,85 @@
+/* Let a sequence of integers be defined as follows:
+
+a(0) = 2
+a(1) = 4
+a(2) = 12
+a(n) = 3 * a(n-3) + 2 * a(n-2) + a(n-3)
+It is necessary to write a function that will return the n-th number in the previously defined sequence for the given integer n. Implement the solution:
+
+recursively without memoization,
+with memoization,
+non-recursively using dynamic programming. */
+
+#include<vector>
+#include<iostream>
+#include<fstream>
+
+int a1(int n) {
+    if (n == 0) return 2;
+    if (n == 1) return 4;
+    if (n == 2) return 12;
+    return 3 * a1(n - 3) + 2 * a1(n - 2) + a1(n - 1);
+}
+
+
+std::vector<int> memorija;
+
+int a2(int n) {
+    if (n == 0) return 2;
+    if (n == 1) return 4;
+    if (n == 2) return 12;
+
+    if (n >= memorija.size()) {
+        memorija.resize(n + 1, -1);
+    }
+
+    if (memorija[n] != -1) {
+        return memorija[n];
+    }
+
+    memorija[n] = 3 * a2(n - 3) + 2 * a2(n - 2) + a2(n - 1);
+    return memorija[n];
+}
+
+
+int a3(int n) {
+    if (n == 0) return 2;
+    if (n == 1) return 4;
+    if (n == 2) return 12;
+
+    int a0 = 2, a1 = 4, a2 = 12;
+    int result;
+    for (int i = 3; i <= n; ++i) {
+        result = 3 * a0 + 2 * a1 + a2;
+        a0 = a1;
+        a1 = a2;
+        a2 = result;
+    }
+
+    return result;
+}
+
+int main() {
+    
+    std::ifstream inputFile("file.txt");
+    if (!inputFile) {
+        std::cerr << "Error opening file.\n";
+        return 1;
+    }
+
+  
+    int n;
+    inputFile >> n;
+    inputFile.close();
+
+    int res1 = a1(n); //rekurzija
+    int res2 = a2(n); // rekurzija s memoizacijom
+    int res3 = a3(n);  // dinamicko
+
+    
+    std::cout << "Rezultat za a(" << n << ") rekurzivno bez memoizacije: " << res1 << std::endl;
+    std::cout << "Rezultat za a(" << n << ") rekurzivno s memoizacijom: " << res2 << std::endl;
+    std::cout << "Rezultat za a(" << n << ") nerekurzivno primjenom dinamičkog programiranja: " << res3 << std::endl;
+
+    return 0;
+}
