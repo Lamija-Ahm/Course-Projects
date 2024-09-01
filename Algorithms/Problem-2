@@ -1,0 +1,32 @@
+// Write a function fast_divide that determines the quotient of two integers using recursion and the method of Egyptian division.
+// This method is similar to the Egyptian multiplication method, which was covered in exercises.
+
+#include<iostream>
+
+int stepen(int x, int y) {
+    int step = 1;
+    while (y * step <= x) {
+        step *= 2;
+    }
+    return step / 2;
+}
+
+int fast_divide(int a, int b) {
+    if (b > a)
+        return 0;
+    int step = stepen(a,b);
+  
+    return step + fast_divide(a - b * step, b);
+}
+
+int main() {
+    int a, b;
+    std::cout << "Unesite djeljenik: ";
+    std::cin >> a;
+    std::cout << "Unesite djelilac: ";
+    std::cin >> b;
+    
+    std::cout << "Količnik dijeljenja: " << fast_divide(a,b) << std::endl;
+    
+    return 0;
+}
