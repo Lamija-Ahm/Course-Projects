@@ -1,0 +1,42 @@
+/* Write a program that finds the largest sum within an array by taking any consecutive number of elements from that array. */
+
+#include <iostream>
+#include <vector>
+#include<fstream>
+
+int maxS(const std::vector<int>& arr) {
+    int maxSum = arr[0];
+    int currentSum = arr[0];
+
+    for (size_t i = 1; i < arr.size(); ++i) {
+        currentSum = std::max(arr[i], currentSum + arr[i]);
+        maxSum = std::max(maxSum, currentSum);
+    }
+
+    return maxSum;
+}
+
+
+
+int main() {
+    std::vector<int> arr;
+    int num;
+
+    std::ifstream inputFile("input.txt");
+    if (!inputFile.is_open()) {
+        std::cerr << "Error: Unable to open file input.txt" << std::endl;
+        return 1;
+    }
+
+    while (inputFile >> num) {
+        arr.push_back(num);
+    }
+
+    inputFile.close();
+
+    int maxSum = maxS(arr);
+
+    std::cout << maxSum << std::endl;
+
+    return 0;
+}
