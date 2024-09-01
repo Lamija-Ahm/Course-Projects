@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+struct Tim {
+    std::string naziv;
+    int bodovi;
+    int primljeniGolovi;
+    int postignutiGolovi;
+};
+
+bool comp(const Tim& a, const Tim& b) {
+    if (a.bodovi != b.bodovi) {
+        return a.bodovi < b.bodovi;
+    }
+    if (a.postignutiGolovi - a.primljeniGolovi != b.postignutiGolovi - b.primljeniGolovi) {
+        return (a.postignutiGolovi - a.primljeniGolovi) < (b.postignutiGolovi - b.primljeniGolovi);
+    }
+    if (a.postignutiGolovi != b.postignutiGolovi) {
+        return a.postignutiGolovi < b.postignutiGolovi;
+    }
+    return a.naziv < b.naziv;
+}
+
+template<typename It>
+void quicksort(It begin, It end, bool (*comp)(const typename It::value_type&, const typename It::value_type&)) {
+    if (std::distance(begin, end) <= 1) {
+        return;
+    }
+
+    auto pivot = *(end - 1);
+    auto mid = std::partition(begin, end - 1, [&](const auto& elem) { return comp(elem, pivot); });
+
+    std::iter_swap(mid, end - 1);
+    quicksort(begin, mid, comp);
+    quicksort(mid + 1, end, comp);
+}
+
+void sortirajTimove(std::vector<Tim>& timovi) {
+    quicksort(timovi.begin(), timovi.end(), comp);
+}
+
+int main() {
+    std::vector<Tim> timovi = {
+        {"Tim1", 3, 5, 3},
+        {"Tim2", 6, 3, 8},
+        {"Tim3", 6, 5, 4},
+        {"Tim4", 3, 5, 3},
+        {"Tim5", 5, 2, 7}
+    };
+
+    sortirajTimove(timovi);
+
+    std::cout << "Sorted teams: \n";
+    for (const auto& tim : timovi) {
+        std::cout << "Naziv: " << tim.naziv << ", Bodovi: " << tim.bodovi
+                  << ", Postignuti golovi: " << tim.postignutiGolovi
+                  << ", Primljeni golovi: " << tim.primljeniGolovi << std::endl;
+    }
+
+    return 0;
+}
