@@ -1,0 +1,53 @@
+/* Write a function that finds the length of the longest increasing subsequence. For example, if the given array is:
+
+10, 22, 9, 33, 21, 50, 41, 60, 80
+The longest increasing subsequence would be:
+10, 22, 33, 50, 60, 80
+and its length is 6.
+
+Solve the problem using dynamic programming. */
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include<fstream>
+
+int najduza_sekvenca(const std::vector<int>& arr) {
+    int n = arr.size();
+    std::vector<int> dp(n, 1);
+
+    for (int i = 1; i < n; ++i) {
+        for (int j = 0; j < i; ++j) {
+            if (arr[i] > arr[j]) {
+                dp[i] = std::max(dp[i], dp[j] + 1);
+            }
+        }
+    }
+
+    return *std::max_element(dp.begin(), dp.end());
+}
+
+
+
+int main() {
+    std::vector<int> arr;
+    int num;
+
+    std::ifstream inputFile("input.txt");
+    if (!inputFile.is_open()) {
+        std::cerr << "Error: Unable to open file input.txt" << std::endl;
+        return 1;
+    }
+
+    while (inputFile >> num) {
+        arr.push_back(num);
+    }
+
+    inputFile.close();
+
+    int length = najduza_sekvenca(arr);
+
+    std::cout << length << std::endl;
+
+    return 0;
+}
