@@ -1,0 +1,63 @@
+#include <algorithm>
+#include <vector>
+#include<iostream>
+
+//O(nlogn)
+//in-place
+//nije stabilan 
+//Bidirekcioni iteratori
+
+template<typename It>
+void insertion_sort(It begin, It end) {
+    for (auto i = begin + 1; i != end; ++i) {
+        auto key = *i;
+        auto j = i - 1;
+        while (j >= begin && *j > key) {
+            *(j + 1) = *j;
+            --j;
+        }
+        *(j + 1) = key;
+    }
+}
+
+template<typename It>
+void quicksort(It begin, It end) {
+    const int granica = 16; 
+
+    auto n = end - begin;
+    if (n <= 1) return;
+
+    auto& last = *(end - 1);
+
+    if (n <= granica) {
+        insertion_sort(begin, end);
+        return;
+    }
+
+    auto it = std::partition(begin, end - 1, [&last](const auto& elem) { return elem < last; });
+    std::swap(*it, last);
+
+    quicksort(begin, it); 
+    quicksort(it + 1, end);
+}
+
+
+int main() {
+    std::vector<int> vec = {9, 7, 4, 11, 12, 23, 14, 31, 10, 6};
+
+    std::cout << "Original: ";
+    for (int num : vec) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+
+    quicksort(vec.begin(), vec.end());
+
+    std::cout << "Sorted: ";
+    for (int num : vec) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
