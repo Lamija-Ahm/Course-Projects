@@ -1,0 +1,72 @@
+/* The Collatz sequence is a recursive sequence defined as:
+
+a(n+1) = a(n) / 2, if a(n) is even,
+a(n+1) = 3 * a(n) + 1, if a(n) is odd.
+It is assumed that for any natural number, this sequence eventually reaches the number 1. 
+For example, for the number 3, the sequence is: 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1.
+Write a function:
+int collatz(unsigned long n);
+that returns the number of steps needed to reduce the initial number to 1. For the example of number 3, the result would be 7 steps.
+
+Determine which number in the interval [2, 100] has the longest path to reach 1.
+Try to optimize the solution using memoization. */
+
+#include <iostream>
+#include <vector>
+#include<fstream>
+
+std::vector<int> memorija;
+
+int collatz(unsigned long n) {
+    if (n == 1) return 0;
+
+    if (n < memorija.size() && memorija[n] != -1) {
+        return memorija[n];
+    }
+
+    int duzina;
+    if (n % 2 == 0) {
+        duzina = 1 + collatz(n / 2);
+    } else {
+        duzina = 1 + collatz(3 * n + 1);
+    }
+
+    if (n < memorija.size()) {
+        memorija[n] = duzina;
+    }
+    return duzina;
+}
+
+int longest_coll(int start, int end) {
+    int najduzi = 0;
+    int Nbroj = 0;
+    memorija.assign(end + 1, -1);
+    for (unsigned long i = start; i <= end; ++i) {
+        int duzina = collatz(i);
+        if (duzina > najduzi) {
+            najduzi = duzina;
+            Nbroj = i;
+        }
+    }
+    return Nbroj;
+}
+
+
+int main() {
+    int start, end;
+
+    std::ifstream inputFile("i.txt");
+    if (!inputFile.is_open()) {
+        std::cerr << "Error: Unable to open file i.txt" << std::endl;
+        return 1;
+    }
+
+    inputFile >> start >> end; // Load the start and end values from the file
+
+    inputFile.close();
+
+    // Your existing code logic goes here
+
+    int number = longest_coll(start, end);
+    std::cout << "Broj u intervalu [" << start << ", " << end << "] s najdužom Collatzovom sekvencijom do broja 1 je: " << number << std::endl;
+    std::cout << "Duljina te sekvence je: " << collatz(number) << " koraka." << std::endl;
