@@ -1,5 +1,3 @@
-/* Implement the Bubble Sort Algorithm */
-
 // Vremenska slozenost bubble sort algoritma - O(n*n)
 // Bubble sort radi sa bidirekcionim tipom iteratora
 // In place
