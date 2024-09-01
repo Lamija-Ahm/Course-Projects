@@ -1,0 +1,59 @@
+/* Implement the upper_bound function with the signature:
+It upper_bound(It begin, It end, const T& element);
+begin and end represent two random-access iterators, for example from a std::vector. 
+The array that the iterators point to is sorted. 
+The third argument is the element that the user wants to insert into the array.
+The function should find in O(log n) time the position in the array where the element 
+should be inserted so that the array remains sorted after the insertion. 
+The function returns an iterator pointing to the position where the element should be inserted. 
+Assume that the user inserts elements using the vector::insert method (which inserts before the position).
+Hint: The standard library has an algorithm called upper_bound. 
+The idea is that the algorithm uses binary search to find the first element that is greater 
+than the given element, or returns an iterator to the end if the element is larger than all elements in the array. */
+
+#include <iostream>
+#include <vector>
+#include<iterator>
+
+template<typename It, typename T>
+It upper_bound(It begin, It end, const T& elem) {
+    
+    while (begin < end) {
+        It mid = begin + (end-begin) / 2;
+        
+        if (*mid <= elem) {
+            begin = mid + 1;
+        } else { 
+            end = mid;
+        }
+    }
+    
+    return begin;
+}
+
+int main() {
+    std::vector<int> vektor = {2, 4, 6, 8, 10};
+    auto it = upper_bound(vektor.begin(), vektor.end(), 7);
+    vektor.insert(it, 7);
+    
+    for (const auto& e : vektor) {
+        std::cout << e << " ";
+    } std::cout << std::endl;
+    
+    it = upper_bound(vektor.begin(), vektor.end(), 20);
+    vektor.insert(it, 20);
+  
+    for (const auto& e : vektor) {
+        std::cout << e << " ";
+    } std::cout << std::endl;
+    
+
+    it = upper_bound(vektor.begin(), vektor.end(), 7);
+    vektor.insert(it, 7);
+    
+    for (const auto& e : vektor) {
+        std::cout << e << " ";
+    } std::cout << std::endl;
+    
+    return 0;
+}
