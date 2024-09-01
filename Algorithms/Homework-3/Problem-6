@@ -1,0 +1,53 @@
+/* A die is rolled n times. Implement an algorithm that prints all combinations of results for which the total sum is less than S. */
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+void findCombinationsHelper(int n, int S, std::vector<int>& currentCombination, int currentSum) {
+    if (currentSum > S) {
+        return;
+    }
+
+    if (n == 0) {
+        for (int num : currentCombination) {
+            std::cout << num << " ";
+        }
+        std::cout << std::endl;
+        return;
+    }
+
+    for (int i = 1; i <= 6; ++i) {
+        currentCombination.push_back(i);
+        findCombinationsHelper(n - 1, S, currentCombination, currentSum + i);
+        currentCombination.pop_back();
+    }
+}
+
+void findCombinations(int n, int S) {
+    std::vector<int> currentCombination;
+    findCombinationsHelper(n, S, currentCombination, 0);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <input.txt>" << std::endl;
+        return 1;
+    }
+
+    std::ifstream file(argv[1]);
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open file " << argv[1] << std::endl;
+        return 1;
+    }
+
+    int n, S;
+    file >> n >> S;
+
+    std::cout << "Combinations of dice rolls with a total sum less than " << S << ":" << std::endl;
+    findCombinations(n, S);
+
+    file.close();
+
+    return 0;
+}
