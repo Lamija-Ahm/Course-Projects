@@ -1,0 +1,52 @@
+/* Write a program that finds the longest subsequence within an array that is also a palindrome. 
+For example, if the sequence is GEEKSFORGEEKS, the longest palindromic subsequence would be EEKEE and its length is 5.
+
+Solve the problem using dynamic programming. */
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <fstream>
+
+int Palindrom(const std::string& str) {
+    int n = str.size();
+    std::vector<int> dp(n, 1);
+
+    for (int i = n - 2; i >= 0; --i) {
+        int prev = 0;
+        for (int j = i + 1; j < n; ++j) {
+            int temp = dp[j];
+            if (str[i] == str[j]) {
+                dp[j] = prev + 2;
+            } else {
+                dp[j] = std::max(dp[j], dp[j - 1]);
+            }
+            prev = temp;
+        }
+    }
+
+    return dp[n - 1];
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <file.txt>" << std::endl;
+        return 1;
+    }
+
+    std::ifstream file(argv[1]);
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open file " << argv[1] << std::endl;
+        return 1;
+    }
+
+    std::string str;
+    std::getline(file, str);
+
+    file.close();
+
+    int length = Palindrom(str);
+    std::cout << length << std::endl;
+
+    return 0;
+}
